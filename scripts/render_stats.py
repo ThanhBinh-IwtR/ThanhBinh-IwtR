@@ -3,6 +3,7 @@ from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 import json
+import math
 import xml.etree.ElementTree as ET
 
 PALETTES = {
@@ -78,7 +79,7 @@ def activity_mix(sample):
 def activity_svg(sample, theme="dark", mobile=False):
     validate_snapshot(sample)
     c = PALETTES[theme]
-    w, h = (400, 660) if mobile else (900, 515)
+    w, h = (400, 660) if mobile else (900, 550)
     body = rect(1, 1, w-2, h-2, c["panel"], c["border"], 12)
     current, longest = streaks(sample["activeDays"], sample["asOf"])
     labels = ["Public repos", "Current streak", "Best in period"]
@@ -107,7 +108,7 @@ def activity_svg(sample, theme="dark", mobile=False):
             month = stamp.month
             if not mobile or col % 8 < 4:
                 body += text(round(x, 2), 128, stamp.strftime("%b"), 10 if mobile else 12, c["muted"])
-    chart_top = 215 if mobile else 280
+    chart_top = 215 if mobile else 293
     body += text(22, chart_top, "Activity overview", 18, c["text"], 500)
     fractions = activity_mix(sample)
     code_total = sum(sample[k] for k in ("commits", "reviews", "pullRequests", "issues"))
@@ -118,7 +119,7 @@ def activity_svg(sample, theme="dark", mobile=False):
         body += text(22, chart_top+77, f'{sample["repositoriesCreated"]} repositories created separately.', 12, c["muted"])
     else:
         body += text(22, chart_top+81, note, 13, c["muted"])
-    cx, cy, radius = (200, 470, 78) if mobile else (695, 365, 83)
+    cx, cy, radius = (200, 470, 78) if mobile else (695, 393, 78)
     body += f'<path d="M{cx-radius} {cy}H{cx+radius}M{cx} {cy-radius}V{cy+radius}" fill="none" stroke="{c["border"]}"/>'
     points = [(cx-radius*fractions[0], cy), (cx, cy-radius*fractions[1]),
               (cx+radius*fractions[3], cy), (cx, cy+radius*fractions[2])]
@@ -138,6 +139,63 @@ def activity_svg(sample, theme="dark", mobile=False):
     return svg(w, h, body, f'GitHub activity: {sample["totalContributions"]} contributions. Snapshot {sample["asOf"]}.')
 
 
+def snake_svg(sample, theme="dark"):
+    """Animate a snake over the saved public calendar; no service or token needed."""
+    validate_snapshot(sample)
+    c = PALETTES[theme]
+    w, h = 900, 182
+    start = date.fromisoformat(sample["periodStart"])
+    start -= timedelta(days=(start.weekday()+1) % 7)
+    end = date.fromisoformat(sample["periodEnd"])
+    cols = (end-start).days//7 + 1
+    step, size = (w-44)/cols, (w-44)/cols-3
+    center = lambda col, row: (22+col*step+size/2, 22+row*step+size/2)
+    cells = [(col, row) for col in range(cols)
+             for row in (range(7) if col % 2 == 0 else range(6, -1, -1))]
+    route = [(-20, center(0, 0)[1])] + [center(*cell) for cell in cells]
+    route += [(w+20, route[-1][1]), (w+20, h+20), (-20, h+20), route[0]]
+    distances = [0.0]
+    for previous, point in zip(route, route[1:]):
+        distances.append(distances[-1]+math.dist(previous, point))
+    duration = distances[-1] / (step*5.5)
+    arrivals = {cell: distances[i+1]/distances[-1] for i, cell in enumerate(cells)}
+    path = "M" + " L".join(f"{x:.2f},{y:.2f}" for x,y in route)
+    b = rect(1, 1, w-2, h-2, c["panel"], c["border"], 10)
+    b += (f'<defs><path id="snake-route" d="{path}"/>'
+          f'<clipPath id="snake-board"><rect x="14" y="14" width="{w-28}" height="132"/></clipPath></defs>')
+    colors = [c["code"], "#44405d" if theme == "dark" else "#e6ddfb",
+              "#71638f" if theme == "dark" else "#c9b9ed", c["mint"], c["accent"]]
+    active = {day["date"]: day for day in sample["activeDays"] if day["count"]}
+    for col, row in cells:
+        stamp = start+timedelta(days=col*7+row)
+        if stamp > end:
+            continue
+        day = active.get(stamp.isoformat())
+        x,y = center(col,row)
+        fill = colors[day["level"]] if day else c["code"]
+        b += (f'<rect x="{x-size/2:.2f}" y="{y-size/2:.2f}" width="{size:.2f}" height="{size:.2f}" '
+              f'rx="2" fill="{fill}" data-date="{stamp.isoformat()}">')
+        if day:
+            arrival = arrivals[(col,row)]
+            b += (f'<animate attributeName="fill" values="{fill};{fill};{c["code"]};{c["code"]}" '
+                  f'keyTimes="0;{arrival:.6f};{arrival+.001:.6f};1" dur="{duration:.3f}s" repeatCount="indefinite"/>')
+        b += '</rect>'
+    b += '<g clip-path="url(#snake-board)">'
+    for index in reversed(range(8)):
+        color = c["mint"] if index == 0 else c["sky"] if index < 3 else c["accent"]
+        b += f'<g opacity="{1-index*.065:.3f}">'
+        b += rect(-size/2, -size/2, size, size, color, radius=3)
+        if index == 0:
+            for eye_y in (-size*.22, size*.22):
+                b += f'<circle cx="{size*.24:.2f}" cy="{eye_y:.2f}" r="1.1" fill="{c["bg"]}"/>'
+        b += (f'<animateMotion dur="{duration:.3f}s" begin="{index/5.5:.3f}s" '
+              'repeatCount="indefinite" rotate="auto" calcMode="paced">'
+              '<mpath xlink:href="#snake-route"/></animateMotion></g>')
+    b += '</g>'
+    b += text(22, 164, f'Public contribution snake · snapshot {sample["asOf"]}', 12, c["muted"])
+    return svg(w,h,b,"Animated contribution snake over Tabi's public contribution calendar.")
+
+
 def render_all(sample, destination):
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
@@ -145,6 +203,7 @@ def render_all(sample, destination):
         for mobile in (False, True):
             suffix = "-mobile" if mobile else ""
             (destination / f"activity{suffix}-{theme}.svg").write_text(activity_svg(sample, theme, mobile), encoding="utf-8")
+        (destination / f"snake-{theme}.svg").write_text(snake_svg(sample, theme), encoding="utf-8")
 
 
 if __name__ == "__main__":

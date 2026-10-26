@@ -35,14 +35,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PROFILE_USERNAME: ThanhBinh-IwtR
         run: python scripts/update_activity.py
-      - name: Generate contribution snake
-        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3
-        with:
-          github_user_name: ThanhBinh-IwtR
-          github_token: ${{ github.token }}
-          outputs: |
-            assets/snake-light.svg?color_snake=#6e58ab&color_dots=#f1f4f8,#e6ddfb,#c9b9ed,#a9dfcf,#c4b5fd
-            assets/snake-dark.svg?palette=github-dark&color_snake=#b6d8f2&color_dots=#111721,#44405d,#71638f,#a9dfcf,#c4b5fd
       - name: Commit successful asset update
         env:
           TARGET_BRANCH: ${{ github.ref_name }}

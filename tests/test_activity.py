@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +19,31 @@ SAMPLE = {
 
 
 class ActivityTests(unittest.TestCase):
+    def test_review_percentage_clears_the_calendar(self):
+        from render_stats import activity_svg
+        for mobile in (False, True):
+            root = ET.fromstring(activity_svg(SAMPLE, mobile=mobile))
+            calendar = [node for node in root.iter() if node.tag.endswith('rect')
+                        and 0 < float(node.get('width', 0)) < 20
+                        and float(node.get('y', 0)) >= 139]
+            calendar_bottom = max(float(node.get('y')) + float(node.get('height')) for node in calendar)
+            review = next(node for node in root.iter() if node.tag.endswith('text') and node.text == 'Code review')
+            percentage_top = float(review.get('y')) - 17 - 14
+            self.assertGreaterEqual(percentage_top - calendar_bottom, 20)
+
+    def test_generated_snake_moves_and_consumes_real_contribution_cells(self):
+        from render_stats import render_all
+        with tempfile.TemporaryDirectory() as temp:
+            render_all(SAMPLE, temp)
+            for theme in ('light', 'dark'):
+                path = Path(temp) / f'snake-{theme}.svg'
+                self.assertTrue(path.is_file(), 'A moving snake must be bundled, without waiting for Actions')
+                root = ET.parse(path).getroot()
+                self.assertGreaterEqual(len(root.findall('.//{*}animateMotion')), 2)
+                animated_days = {node.get('data-date') for node in root.iter()
+                                 if node.get('data-date') and node.find('{*}animate') is not None}
+                self.assertEqual(animated_days, {day['date'] for day in SAMPLE['activeDays'] if day['count']})
+
     def test_streak_survives_until_end_of_today(self):
         from render_stats import streaks
         days = [{"date": d, "count": 1} for d in ("2026-10-23", "2026-10-24", "2026-10-25")]

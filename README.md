@@ -73,24 +73,12 @@
 
 ## Tools behind the work
 
-<p align="center">
-  <img src="assets/python.svg" width="38" height="38" alt="Python" title="Python">&nbsp;
-  <img src="assets/pytorch.svg" width="38" height="38" alt="PyTorch" title="PyTorch">&nbsp;
-  <img src="assets/tensorflow.svg" width="38" height="38" alt="TensorFlow" title="TensorFlow">&nbsp;
-  <img src="assets/opencv.svg" width="38" height="38" alt="OpenCV" title="OpenCV">&nbsp;
-  <img src="assets/numpy.svg" width="38" height="38" alt="NumPy" title="NumPy">&nbsp;
-  <img src="assets/pandas.svg" width="38" height="38" alt="pandas" title="pandas">&nbsp;
-  <img src="assets/scikitlearn.svg" width="38" height="38" alt="scikit-learn" title="scikit-learn">&nbsp;
-  <img src="assets/jupyter.svg" width="38" height="38" alt="Jupyter" title="Jupyter">
-</p>
-
-**Deep learning** · PyTorch · TensorFlow · Lightning · Transformers · PEFT / LoRA · CUDA / DDP · Cross-attention
-
-**Vision / audio** · YOLO11 · Depth Anything v2 · OpenCV · MediaPipe · Faster Whisper · Wav2Vec2 · OpenAI / ElevenLabs
-
-**Bio / molecular** · ESM-3 · MoLFormer-XL · RDKit · SMILES · OOD evaluation
-
-**Data / delivery** · NumPy · pandas · scikit-learn · SciPy · Matplotlib · W&amp;B · Jupyter · FastAPI · Next.js / React · TypeScript · Django · Supabase / pgvector · Git
+<picture>
+  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/toolbox-mobile-dark.svg">
+  <source media="(max-width: 600px)" srcset="assets/toolbox-mobile-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/toolbox-dark.svg">
+  <img src="assets/toolbox-light.svg" width="100%" alt="Tools in rounded boxes. Deep learning: PyTorch, TensorFlow, Lightning, Transformers, PEFT/LoRA, CUDA, DDP, cross-attention. Vision/audio: YOLO11, Depth Anything v2, OpenCV, MediaPipe, Faster Whisper, Wav2Vec2, OpenAI, ElevenLabs. Bio: ESM-3, MoLFormer-XL, RDKit, SMILES, OOD evaluation. Data: Python, NumPy, pandas, scikit-learn, SciPy, Matplotlib, W&amp;B, Jupyter. Web: FastAPI, Next.js, React, TypeScript, Django, Supabase, pgvector, Git.">
+</picture>
 
 ## Learning in public
 
@@ -107,7 +95,7 @@
   <summary>Contribution snake</summary>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
-    <img src="assets/snake-light.svg" width="100%" alt="Contribution calendar snake">
+    <img src="assets/snake-light.svg" width="100%" alt="Animated snake following and consuming cells from the public contribution calendar">
   </picture>
 </details>
 

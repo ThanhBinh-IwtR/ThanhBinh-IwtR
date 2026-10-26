@@ -5,6 +5,7 @@ import base64
 import json
 import re
 import textwrap
+import xml.etree.ElementTree as ET
 from render_stats import PALETTES, rect, text, svg, render_all
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -144,22 +145,41 @@ def web_card(c, key, mobile):
     return svg(w, h, b, title+": "+description)
 
 
-def snake_fallback(sample, c):
-    # A truthful static calendar remains usable before the first scheduled animation.
-    w, h = 900, 160
-    b = rect(1, 1, w-2, h-2, c["panel"], c["border"], 9)
-    counts = {d["date"]: d["level"] for d in sample["activeDays"]}
-    from datetime import date, timedelta
-    start = date.fromisoformat(sample["periodStart"])
-    start -= timedelta(days=(start.weekday()+1)%7)
-    end = date.fromisoformat(sample["periodEnd"])
-    cols = (end-start).days//7+1
-    step = 856/cols
-    colors = [c["code"], "#44405d" if c["bg"] == "#0d1117" else "#e6ddfb", c["sky"], c["mint"], c["accent"]]
-    for i in range((end-start).days+1):
-        stamp = (start+timedelta(days=i)).isoformat()
-        b += rect(round(22+(i//7)*step,2), round(22+(i%7)*step,2), round(step-3,2), round(step-3,2), colors[counts.get(stamp,0)], radius=2)
-    return svg(w, h, b, "Contribution calendar. The scheduled workflow generates the animated snake.")
+TOOL_GROUPS = [
+    ("DEEP LEARNING", ["PyTorch", "TensorFlow", "Lightning", "Transformers", "PEFT / LoRA", "CUDA", "DDP", "Cross-attention"]),
+    ("VISION / AUDIO", ["YOLO11", "Depth Anything v2", "OpenCV", "MediaPipe", "Faster Whisper", "Wav2Vec2", "OpenAI", "ElevenLabs"]),
+    ("BIO / MOLECULAR", ["ESM-3", "MoLFormer-XL", "RDKit", "SMILES", "OOD evaluation"]),
+    ("DATA / SCIENCE", ["Python", "NumPy", "pandas", "scikit-learn", "SciPy", "Matplotlib", "W&B", "Jupyter"]),
+    ("WEB / DELIVERY", ["FastAPI", "Next.js", "React", "TypeScript", "Django", "Supabase", "pgvector", "Git"]),
+]
+TOOL_ICONS = {"Python": "python", "PyTorch": "pytorch", "TensorFlow": "tensorflow",
+              "OpenCV": "opencv", "NumPy": "numpy", "pandas": "pandas",
+              "scikit-learn": "scikitlearn", "Jupyter": "jupyter"}
+
+
+def toolbox(c, mobile):
+    w = 400 if mobile else 900
+    left = 16 if mobile else 170
+    y, b = 12, ""
+    for category, tools in TOOL_GROUPS:
+        b += text(16 if mobile else 22, y+16 if mobile else y+25,
+                  category, 12, c["accent"], mono=True)
+        row_y, x = (y+30 if mobile else y), left
+        for label in tools:
+            icon = TOOL_ICONS.get(label)
+            width = len(label)*9+28+(28 if icon else 0)
+            if x+width > w-16:
+                x, row_y = left, row_y+48
+            b += rect(x,row_y,width,38,c["panel"],c["border"],8)
+            if icon:
+                image = ET.fromstring((ASSETS/f"{icon}.svg").read_text(encoding="utf-8"))
+                for key,value in {"x":x+11,"y":row_y+9,"width":20,"height":20}.items():
+                    image.set(key,str(value))
+                b += ET.tostring(image,encoding="unicode")
+            b += text(x+(40 if icon else 14),row_y+24,label,15,c["text"],mono=True)
+            x += width+10
+        y = row_y+38+(28 if mobile else 24)
+    return svg(w,y-8,b,"Tabi's toolbox: deep learning, vision and audio, molecular ML, data science and web delivery.")
 
 
 def main():
@@ -167,17 +187,13 @@ def main():
     for theme, c in PALETTES.items():
         for mobile in (False, True):
             suffix = "-mobile" if mobile else ""
-            items = {"banner": banner(c,mobile), "intro":intro(c,mobile), "bio":bio(c,mobile)}
+            items = {"banner": banner(c,mobile), "intro":intro(c,mobile), "bio":bio(c,mobile), "toolbox":toolbox(c,mobile)}
             items.update({name:project_card(c,name,mobile) for name in PROJECTS})
             items.update({name:web_card(c,name,mobile) for name in WEB})
             for name, content in items.items():
                 (ASSETS/f"{name}{suffix}-{theme}.svg").write_text(content,encoding="utf-8")
     sample = json.loads((ROOT/"data/activity.json").read_text(encoding="utf-8"))
     render_all(sample, ASSETS)
-    for theme,c in PALETTES.items():
-        path = ASSETS/f"snake-{theme}.svg"
-        if not path.exists():
-            path.write_text(snake_fallback(sample,c),encoding="utf-8")
     print("Built responsive light/dark profile artwork.")
 
 
