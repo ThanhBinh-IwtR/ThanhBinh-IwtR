@@ -1,0 +1,65 @@
+{
+  "asOf": "2026-10-26",
+  "periodStart": "2025-10-26",
+  "periodEnd": "2026-10-26",
+  "publicRepositories": 25,
+  "totalContributions": 21,
+  "commits": 12,
+  "pullRequests": 6,
+  "issues": 0,
+  "reviews": 0,
+  "repositoriesCreated": 3,
+  "source": "https://github.com/ThanhBinh-IwtR",
+  "activeDays": [
+    {
+      "count": 4,
+      "date": "2026-03-31",
+      "level": 3
+    },
+    {
+      "count": 1,
+      "date": "2026-07-07",
+      "level": 1
+    },
+    {
+      "count": 6,
+      "date": "2026-07-14",
+      "level": 4
+    },
+    {
+      "count": 2,
+      "date": "2026-10-06",
+      "level": 2
+    },
+    {
+      "count": 1,
+      "date": "2025-10-29",
+      "level": 1
+    },
+    {
+      "count": 1,
+      "date": "2026-04-01",
+      "level": 1
+    },
+    {
+      "count": 2,
+      "date": "2025-10-30",
+      "level": 2
+    },
+    {
+      "count": 2,
+      "date": "2026-04-02",
+      "level": 2
+    },
+    {
+      "count": 1,
+      "date": "2026-09-18",
+      "level": 1
+    },
+    {
+      "count": 1,
+      "date": "2026-09-19",
+      "level": 1
+    }
+  ]
+}

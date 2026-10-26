@@ -1,0 +1,60 @@
+name: Profile assets
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0,12 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/profile-assets.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-assets
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Check activity calculations
+        run: python -m unittest discover -s tests -v
+      - name: Refresh publicly visible statistics
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PROFILE_USERNAME: ThanhBinh-IwtR
+        run: python scripts/update_activity.py
+      - name: Generate contribution snake
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3
+        with:
+          github_user_name: ThanhBinh-IwtR
+          github_token: ${{ github.token }}
+          outputs: |
+            assets/snake-light.svg?color_snake=#6e58ab&color_dots=#f1f4f8,#e6ddfb,#c9b9ed,#a9dfcf,#c4b5fd
+            assets/snake-dark.svg?palette=github-dark&color_snake=#b6d8f2&color_dots=#111721,#44405d,#71638f,#a9dfcf,#c4b5fd
+      - name: Commit successful asset update
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets data
+          if git diff --cached --quiet
+          then
+            echo 'Profile assets are already current.'
+            exit 0
+          fi
+          git commit -m 'chore: refresh public profile activity'
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
