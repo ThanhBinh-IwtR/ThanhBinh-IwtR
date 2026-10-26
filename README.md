@@ -37,12 +37,14 @@
 
 ## The biological direction
 
+<p align="center">
 <a href="https://github.com/ThanhBinh-IwtR/K-ICM"><picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/bio-mobile-dark.svg">
   <source media="(max-width: 600px)" srcset="assets/bio-mobile-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/bio-dark.svg">
   <img src="assets/bio-light.svg" width="100%" alt="K-ICM: enzyme turnover prediction from protein sequence and substrate SMILES, using ESM-3 with LoRA, MoLFormer-XL, cross-attention fusion, PyTorch Lightning and OOD evaluation. View research code.">
 </picture></a>
+</p>
 
 ## Built for people &amp; brands
 
@@ -92,12 +94,14 @@
 
 ## Learning in public
 
+<p align="center">
 <a href="https://github.com/ThanhBinh-IwtR"><picture>
   <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/activity-mobile-dark.svg">
   <source media="(max-width: 600px)" srcset="assets/activity-mobile-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
   <img src="assets/activity-light.svg" width="100%" alt="Publicly visible GitHub activity: contribution calendar, current and best streak within the displayed period, and commits, code reviews, issues and pull requests on a cross chart. Each image includes its snapshot date.">
 </picture></a>
+</p>
 
 <details>
   <summary>Contribution snake</summary>
