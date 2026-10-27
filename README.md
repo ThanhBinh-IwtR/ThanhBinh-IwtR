@@ -1,103 +1,186 @@
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/banner-mobile-dark.svg">
-  <source media="(max-width: 600px)" srcset="assets/banner-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-  <img src="assets/banner-light.svg" alt="Thanh Bình. Call me Tabi. AI, computer vision and bioinformatics." width="100%">
-</picture>
+<div align="center">
 
-<p align="center">
-  <samp><a href="https://github.com/ThanhBinh-IwtR">GitHub</a> / <a href="#vision-in-practice">Selected work</a> / <a href="#the-biological-direction">Bioinformatics</a></samp>
-</p>
+<samp>PERCEPTION · REASONING · DISCOVERY</samp>
+
+# Thanh Bình.
+
+**Call me Tabi.** From visual signals to biological insight.
+
+`AI / Agents` &nbsp; `Machine Learning` &nbsp; `Bioinformatics`
+
+<samp><a href="https://github.com/ThanhBinh-IwtR">GitHub</a> / <a href="#vision-in-practice">Selected work</a> / <a href="#the-biological-direction">Bioinformatics</a></samp>
+
+</div>
 
 ## A little about me
 
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/intro-mobile-dark.svg">
-  <source media="(max-width: 600px)" srcset="assets/intro-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/intro-dark.svg">
-  <img src="assets/intro-light.svg" alt="I'm Tabi. I build across computer vision, multimodal AI and machine learning for biological data. I also create client landing pages and AI applications, and explore agentic AI." width="100%">
-</picture>
+```js
+const binh = {
+  alias: "Tabi",
+  focus: [
+    "AI & Computer Vision",
+    "ML for Biology"
+  ],
+  exploring: "Agentic AI",
+  also: "Web applications"
+};
+```
+
+I build across computer vision, multimodal AI and machine learning for biological data.
+
+- **AI & computer vision**: perception, speech and assistive AI systems.
+- **Bioinformatics**: protein language models and enzyme kinetics.
+- **Web**: client landing pages and AI applications.
 
 ## Vision, in practice
 
-<p align="center">
-  <a href="https://github.com/ThanhBinh-IwtR/CAPSTONE_25_SP_NAVISIGHT"><picture>
-    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/navisight-mobile-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/navisight-mobile-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/navisight-dark.svg">
-    <img src="assets/navisight-light.svg" width="400" alt="NAVISIGHT: an assistive vision system combining YOLO11 object detection, Depth Anything v2, voice interaction and spoken guidance. View repository.">
-  </picture></a>
-  <a href="https://github.com/ThanhBinh-IwtR/ViSL"><picture>
-    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/visl-mobile-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/visl-mobile-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/visl-dark.svg">
-    <img src="assets/visl-light.svg" width="400" alt="ViSL: Vietnamese sign-language recognition with MediaPipe landmarks, a custom PyTorch Transformer and FastAPI. View repository.">
-  </picture></a>
-</p>
+<table>
+<tr>
+<td width="50%" valign="top">
+
+<samp>MULTIMODAL AI</samp>
+
+### [NAVISIGHT ↗](https://github.com/ThanhBinh-IwtR/CAPSTONE_25_SP_NAVISIGHT)
+
+A vision assistant for visually impaired users, combining object detection, depth estimation, voice interaction and spoken guidance.
+
+`PyTorch` `YOLO11` `Depth Anything v2` `Whisper`
+
+<sub>Assistive AI · Vision × Speech</sub>
+
+</td>
+<td width="50%" valign="top">
+
+<samp>SIGN LANGUAGE AI</samp>
+
+### [ViSL ↗](https://github.com/ThanhBinh-IwtR/ViSL)
+
+Vietnamese sign-language recognition using hand, face and pose landmarks with a custom PyTorch Transformer and web interface.
+
+`PyTorch` `MediaPipe` `Transformer` `FastAPI`
+
+<sub>Accessibility · Sequence modeling</sub>
+
+</td>
+</tr>
+</table>
 
 ## The biological direction
 
-<p align="center">
-<a href="https://github.com/ThanhBinh-IwtR/K-ICM"><picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/bio-mobile-dark.svg">
-  <source media="(max-width: 600px)" srcset="assets/bio-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/bio-dark.svg">
-  <img src="assets/bio-light.svg" width="100%" alt="K-ICM: enzyme turnover prediction from protein sequence and substrate SMILES, using ESM-3 with LoRA, MoLFormer-XL, cross-attention fusion, PyTorch Lightning and OOD evaluation. View research code.">
-</picture></a>
-</p>
+<samp>BIOINFORMATICS · MOLECULAR ML</samp>
+
+### [K-ICM ↗](https://github.com/ThanhBinh-IwtR/K-ICM)
+
+Predicting enzyme turnover from protein sequences and substrate SMILES with protein and molecular language models and cross-attention fusion.
+
+`ESM-3` `LoRA` `MoLFormer-XL` `PyTorch Lightning` `OOD evaluation`
+
+```mermaid
+flowchart LR
+    seq["Protein sequence<br>M A G W K …"] --> esm["ESM-3 + LoRA"]
+    smi["Substrate SMILES<br>CCO"] --> mol["MoLFormer-XL"]
+    esm -- residue --> fuse{{"Cross-attention fusion"}}
+    mol -- molecule --> fuse
+    fuse --> kcat(["predicted log₁₀ kcat"])
+
+    classDef input stroke:#8b74d0,stroke-width:2px
+    classDef model stroke:#3f9c8a,stroke-width:2px
+    class seq,smi,kcat input
+    class esm,mol,fuse model
+```
+
+<sub>[Explore the research code ↗](https://github.com/ThanhBinh-IwtR/K-ICM)</sub>
 
 ## Built for people &amp; brands
 
-<p align="center">
-  <a href="https://github.com/ThanhBinh-IwtR/Chi-Chi-Chanh-Chanh"><picture>
-    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/chichi-mobile-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/chichi-mobile-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/chichi-dark.svg">
-    <img src="assets/chichi-light.svg" width="260" alt="Chi Chi Chành Chành: cultural event landing page. View repository.">
-  </picture></a>
-  <a href="https://github.com/ThanhBinh-IwtR/F_Talent2022"><picture>
-    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/ftalent-mobile-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/ftalent-mobile-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/ftalent-dark.svg">
-    <img src="assets/ftalent-light.svg" width="260" alt="F-Talent 2022: talent competition website. View repository.">
-  </picture></a>
-  <a href="https://github.com/ThanhBinh-IwtR/kierabeauty"><picture>
-    <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/kiera-mobile-dark.svg">
-    <source media="(max-width: 600px)" srcset="assets/kiera-mobile-light.svg">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/kiera-dark.svg">
-    <img src="assets/kiera-light.svg" width="260" alt="Kiera Nguyen Beauty Care: beauty business website. View repository.">
-  </picture></a>
-</p>
+<table>
+<tr>
+<td width="33%" align="center" valign="top">
+
+<a href="https://github.com/ThanhBinh-IwtR/Chi-Chi-Chanh-Chanh"><img src="assets/chichi-logo.png" height="96" alt="Chi Chi Chành Chành logo"></a>
+
+**[Chi Chi Chành Chành ↗](https://github.com/ThanhBinh-IwtR/Chi-Chi-Chanh-Chanh)**
+
+A cultural event landing page bringing the programme, activities and partners together.
+
+<sub>Events · HTML / CSS / JS</sub>
+
+</td>
+<td width="33%" align="center" valign="top">
+
+<a href="https://github.com/ThanhBinh-IwtR/F_Talent2022"><img src="assets/ftalent-logo.png" height="72" alt="F-Talent 2022 logo"></a>
+
+**[F-Talent 2022 ↗](https://github.com/ThanhBinh-IwtR/F_Talent2022)**
+
+A talent competition website with judges, event schedules, galleries and registration links.
+
+<sub>Events · HTML / CSS / JS</sub>
+
+</td>
+<td width="33%" align="center" valign="top">
+
+<a href="https://github.com/ThanhBinh-IwtR/kierabeauty"><img src="assets/kiera-logo.png" height="64" alt="Kiera Nguyen Beauty Care logo"></a>
+
+**[Kiera Nguyen Beauty Care ↗](https://github.com/ThanhBinh-IwtR/kierabeauty)**
+
+A beauty business website presenting services, pricing, imagery and booking contact points.
+
+<sub>Business · HTML / CSS / JS</sub>
+
+</td>
+</tr>
+</table>
 
 <p align="center"><sub>More work: <a href="https://github.com/ThanhBinh-IwtR/ViSL_website">ViSL website</a> · <a href="https://github.com/ThanhBinh-IwtR/Portfolio">Portfolio</a> · <a href="https://github.com/ThanhBinh-IwtR/BHXH-KHANH-HOA">Insurance RAG demo</a></sub></p>
 
 ## Tools behind the work
 
-<picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/toolbox-mobile-dark.svg">
-  <source media="(max-width: 600px)" srcset="assets/toolbox-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/toolbox-dark.svg">
-  <img src="assets/toolbox-light.svg" width="100%" alt="Tools in rounded boxes. Deep learning: PyTorch, TensorFlow, Lightning, Transformers, PEFT/LoRA, CUDA, DDP, cross-attention. Vision/audio: YOLO11, Depth Anything v2, OpenCV, MediaPipe, Faster Whisper, Wav2Vec2, OpenAI, ElevenLabs. Bio: ESM-3, MoLFormer-XL, RDKit, SMILES, OOD evaluation. Data: Python, NumPy, pandas, scikit-learn, SciPy, Matplotlib, W&amp;B, Jupyter. Web: FastAPI, Next.js, React, TypeScript, Django, Supabase, pgvector, Git.">
-</picture>
+<p align="center">
+  <img src="assets/python.svg" width="36" alt="Python">&nbsp;
+  <img src="assets/pytorch.svg" width="36" alt="PyTorch">&nbsp;
+  <img src="assets/tensorflow.svg" width="36" alt="TensorFlow">&nbsp;
+  <img src="assets/opencv.svg" width="36" alt="OpenCV">&nbsp;
+  <img src="assets/numpy.svg" width="36" alt="NumPy">&nbsp;
+  <img src="assets/pandas.svg" width="36" alt="pandas">&nbsp;
+  <img src="assets/scikitlearn.svg" width="36" alt="scikit-learn">&nbsp;
+  <img src="assets/jupyter.svg" width="36" alt="Jupyter">
+</p>
+
+| Area | Tools |
+| :-- | :-- |
+| **Deep learning** | `PyTorch` `TensorFlow` `Lightning` `Transformers` `PEFT / LoRA` `CUDA` `DDP` `Cross-attention` |
+| **Vision / audio** | `YOLO11` `Depth Anything v2` `OpenCV` `MediaPipe` `Faster Whisper` `Wav2Vec2` `OpenAI` `ElevenLabs` |
+| **Bio / molecular** | `ESM-3` `MoLFormer-XL` `RDKit` `SMILES` `OOD evaluation` |
+| **Data / science** | `Python` `NumPy` `pandas` `scikit-learn` `SciPy` `Matplotlib` `W&B` `Jupyter` |
+| **Web / delivery** | `FastAPI` `Next.js` `React` `TypeScript` `Django` `Supabase` `pgvector` `Git` |
 
 ## Learning in public
 
-<p align="center">
-<a href="https://github.com/ThanhBinh-IwtR"><picture>
-  <source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/activity-mobile-dark.svg">
-  <source media="(max-width: 600px)" srcset="assets/activity-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/activity-dark.svg">
-  <img src="assets/activity-light.svg" width="100%" alt="Publicly visible GitHub activity: contribution calendar, current and best streak within the displayed period, and commits, code reviews, issues and pull requests on a cross chart. Each image includes its snapshot date.">
-</picture></a>
-</p>
+<!-- activity:start -->
+<!-- Generated by scripts/update_activity.py; edits inside this block are overwritten. -->
 
-<details>
-  <summary>Contribution snake</summary>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
-    <img src="assets/snake-light.svg" width="100%" alt="Animated snake following and consuming cells from the public contribution calendar">
-  </picture>
-</details>
+| Contributions | Active days | Current streak | Longest streak | Public repos |
+| :---: | :---: | :---: | :---: | :---: |
+| **25** | 11 | 1 day | 3 days | 26 |
+
+```text
+Oct 2025    3  ██████████▌
+Nov 2025    0  ·
+Dec 2025    0  ·
+Jan 2026    0  ·
+Feb 2026    0  ·
+Mar 2026    4  █████████████▌
+Apr 2026    3  ██████████▌
+May 2026    0  ·
+Jun 2026    0  ·
+Jul 2026    7  ████████████████████████
+Aug 2026    0  ·
+Sep 2026    2  ███████
+Oct 2026    6  ████████████████████▌
+```
+
+<sub>Oct 2025 – Oct 2026 · contributions per month from the public calendar of <a href="https://github.com/ThanhBinh-IwtR">ThanhBinh-IwtR</a> · checked daily by GitHub Actions</sub>
+<!-- activity:end -->
 
 <br>
 <p align="center"><samp>Curiosity → experiments → useful tools.<br>Tabi · AI / Vision / Bioinformatics</samp></p>

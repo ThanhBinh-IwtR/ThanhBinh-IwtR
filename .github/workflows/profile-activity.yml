@@ -1,22 +1,21 @@
-name: Profile assets
+name: Profile activity
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,12 * * *'
+    - cron: '20 0 * * *'
   push:
     branches: [main]
     paths:
-      - 'README.md'
       - 'scripts/**'
       - 'tests/**'
-      - '.github/workflows/profile-assets.yml'
+      - '.github/workflows/profile-activity.yml'
 
 permissions:
   contents: write
 
 concurrency:
-  group: profile-assets
+  group: profile-activity
   cancel-in-progress: false
 
 jobs:
@@ -30,21 +29,28 @@ jobs:
           python-version: '3.12'
       - name: Check activity calculations
         run: python -m unittest discover -s tests -v
-      - name: Refresh publicly visible statistics
+      - name: Draw the contribution snake from the real calendar
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3.5.0
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            assets/snake-light.svg?color_snake=#2b776a&color_dots=#ebedf0,#d8ccf6,#b3a1e6,#8b74d0,#6e58ab
+            assets/snake-dark.svg?color_snake=#a9dfcf&color_dots=#161b22,#3b3360,#5b4e91,#8f7cc9,#c4b5fd
+      - name: Write public activity into README
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          PROFILE_USERNAME: ThanhBinh-IwtR
+          PROFILE_USERNAME: ${{ github.repository_owner }}
         run: python scripts/update_activity.py
-      - name: Commit successful asset update
+      - name: Commit changed activity
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets data
+          git add README.md assets/snake-light.svg assets/snake-dark.svg
           if git diff --cached --quiet
           then
-            echo 'Profile assets are already current.'
+            echo 'Profile activity is already current.'
             exit 0
           fi
           git commit -m 'chore: refresh public profile activity'

@@ -1,76 +1,144 @@
-"""Refresh publicly visible GitHub metrics without a personal access token."""
-from datetime import datetime, timedelta, timezone
+"""Write public GitHub activity into README.md as plain Markdown. Standard library only.
+
+Only the block between the activity markers is generated; the rest of the README is
+edited by hand. Needs a token (the Actions token is enough) to read the calendar.
+"""
+from datetime import date, timedelta
 from pathlib import Path
 import json
 import os
 import tempfile
 import urllib.request
-from render_stats import render_all, validate_snapshot
 
-QUERY = """query($login:String!,$from:DateTime!,$to:DateTime!){
+ROOT = Path(__file__).resolve().parents[1]
+START, END = "<!-- activity:start -->", "<!-- activity:end -->"
+MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
+BAR_WIDTH = 24
+SNAKE = "assets/snake-light.svg"
+SNAKE_PICTURE = """<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
+  <img src="assets/snake-light.svg" width="100%" alt="A snake eating the cells of the public GitHub contribution calendar">
+</picture>"""
+QUERY = """query($login:String!){
   user(login:$login){
     repositories(privacy:PUBLIC,ownerAffiliations:[OWNER]){totalCount}
-    contributionsCollection(from:$from,to:$to){
-      totalCommitContributions totalIssueContributions totalPullRequestContributions
-      totalPullRequestReviewContributions totalRepositoryContributions
-      contributionCalendar{totalContributions weeks{contributionDays{
-        date contributionCount contributionLevel
-      }}}
-    }
+    contributionsCollection{contributionCalendar{
+      totalContributions weeks{contributionDays{date contributionCount}}
+    }}
   }
 }"""
 
 
-def fetch_snapshot(token, username):
-    now = datetime.now(timezone.utc).replace(microsecond=0)
-    start = now - timedelta(days=365)
-    stamp = lambda d: d.isoformat().replace("+00:00", "Z")
-    payload = json.dumps({"query": QUERY, "variables": {"login": username, "from": stamp(start), "to": stamp(now)}}).encode()
+def fetch_calendar(token, username):
+    payload = json.dumps({"query": QUERY, "variables": {"login": username}}).encode()
     request = urllib.request.Request("https://api.github.com/graphql", data=payload,
         headers={"Authorization": "Bearer " + token, "Content-Type": "application/json", "User-Agent": "Tabi-Profile"})
     with urllib.request.urlopen(request, timeout=45) as response:
-        body = json.load(response)
-    if body.get("errors") or not body.get("data", {}).get("user"):
-        raise RuntimeError("GitHub did not return a complete public activity snapshot; previous files are unchanged.")
-    user = body["data"]["user"]
-    collection = user["contributionsCollection"]
-    calendar = collection["contributionCalendar"]
-    levels = {"NONE": 0, "FIRST_QUARTILE": 1, "SECOND_QUARTILE": 2, "THIRD_QUARTILE": 3, "FOURTH_QUARTILE": 4}
-    days = [{"date": d["date"], "count": d["contributionCount"], "level": levels[d["contributionLevel"]]}
-            for week in calendar["weeks"] for d in week["contributionDays"]
-            if start.date().isoformat() <= d["date"] <= now.date().isoformat()]
-    sample = {
-        "asOf": now.date().isoformat(), "periodStart": min(d["date"] for d in days),
-        "periodEnd": max(d["date"] for d in days), "publicRepositories": user["repositories"]["totalCount"],
-        "totalContributions": calendar["totalContributions"], "commits": collection["totalCommitContributions"],
-        "pullRequests": collection["totalPullRequestContributions"], "issues": collection["totalIssueContributions"],
-        "reviews": collection["totalPullRequestReviewContributions"], "repositoriesCreated": collection["totalRepositoryContributions"],
-        "source": "https://github.com/" + username, "activeDays": days,
-    }
-    validate_snapshot(sample)
-    return sample
+        return json.load(response)
 
 
-def refresh(root, token, username, fetcher=fetch_snapshot):
-    root = Path(root)
-    sample = fetcher(token, username)
-    validate_snapshot(sample)
-    # Generate and validate every new asset before replacing any existing file.
-    with tempfile.TemporaryDirectory(dir=root) as temp:
-        staged = Path(temp)
-        render_all(sample, staged)
-        (staged / "activity.json").write_text(json.dumps(sample, indent=2) + "\n", encoding="utf-8")
-        (root / "assets").mkdir(exist_ok=True)
-        (root / "data").mkdir(exist_ok=True)
-        for item in staged.glob("*.svg"):
-            os.replace(item, root / "assets" / item.name)
-        os.replace(staged / "activity.json", root / "data/activity.json")
-    print("Updated publicly visible activity as of " + sample["asOf"])
+def read_snapshot(body):
+    """Check a GraphQL response and keep what the README shows: repos, total and daily counts."""
+    user = (body.get("data") or {}).get("user")
+    if body.get("errors") or not user:
+        raise RuntimeError("GitHub did not return a complete contribution calendar; README is unchanged.")
+    calendar = user["contributionsCollection"]["contributionCalendar"]
+    days = sorted((date.fromisoformat(d["date"]), d["contributionCount"])
+                  for week in calendar["weeks"] for d in week["contributionDays"])
+    if not days:
+        raise ValueError("Empty contribution calendar")
+    for (previous, _), (stamp, _) in zip(days, days[1:]):
+        if stamp - previous != timedelta(days=1):
+            raise ValueError("Calendar days must be consecutive and unique")
+    if any(type(count) is not int or count < 0 for _, count in days):
+        raise ValueError("Invalid contribution count")
+    if sum(count for _, count in days) != calendar["totalContributions"]:
+        raise ValueError("Calendar total does not match contribution total")
+    return {"publicRepositories": user["repositories"]["totalCount"],
+            "totalContributions": calendar["totalContributions"], "days": days}
+
+
+def streaks(days):
+    """Current and longest run of active days; today still counts until it ends."""
+    active = {stamp for stamp, count in days if count}
+    today = days[-1][0]
+    cursor = today if today in active else today - timedelta(days=1)
+    current = 0
+    while cursor in active:
+        current += 1
+        cursor -= timedelta(days=1)
+    longest = run = 0
+    previous = None
+    for stamp in sorted(active):
+        run = run + 1 if previous is not None and stamp - previous == timedelta(days=1) else 1
+        longest = max(longest, run)
+        previous = stamp
+    return current, longest
+
+
+def monthly(days):
+    totals = {}
+    for stamp, count in days:
+        key = f"{MONTHS[stamp.month-1]} {stamp.year}"
+        totals[key] = totals.get(key, 0) + count
+    return list(totals.items())
+
+
+def bar(value, peak, width=BAR_WIDTH):
+    if not value:
+        return "·"
+    halves = max(1, round(value / peak * width * 2))
+    return "█" * (halves // 2) + "▌" * (halves % 2)
+
+
+def render(snapshot, username, snake=False):
+    """The generated block; the snake is shown once the workflow has drawn it."""
+    current, longest = streaks(snapshot["days"])
+    active = sum(1 for _, count in snapshot["days"] if count)
+    months = monthly(snapshot["days"])
+    peak = max(total for _, total in months) or 1
+    days = lambda n: f"{n} day" + ("" if n == 1 else "s")
+    return "\n".join([
+        "<!-- Generated by scripts/update_activity.py; edits inside this block are overwritten. -->",
+        "",
+        "| Contributions | Active days | Current streak | Longest streak | Public repos |",
+        "| :---: | :---: | :---: | :---: | :---: |",
+        f'| **{snapshot["totalContributions"]}** | {active} | {days(current)} | {days(longest)} | {snapshot["publicRepositories"]} |',
+        "",
+        "```text",
+        *(f"{label}  {total:>3}  {bar(total, peak)}" for label, total in months),
+        "```",
+        "",
+        f'<sub>{months[0][0]} – {months[-1][0]} · contributions per month from the public calendar of '
+        f'<a href="https://github.com/{username}">{username}</a> · checked daily by GitHub Actions</sub>',
+        *(["", SNAKE_PICTURE] if snake else []),
+    ])
+
+
+def splice(readme, block):
+    if readme.count(START) != 1 or readme.count(END) != 1 or readme.index(START) > readme.index(END):
+        raise ValueError(f"README.md needs exactly one {START} ... {END} block")
+    head, rest = readme.split(START)
+    return head + START + "\n" + block + "\n" + END + rest.split(END, 1)[1]
+
+
+def refresh(readme_path, token, username, fetcher=fetch_calendar):
+    readme_path = Path(readme_path)
+    snapshot = read_snapshot(fetcher(token, username))
+    old = readme_path.read_text(encoding="utf-8")
+    new = splice(old, render(snapshot, username, (readme_path.parent / SNAKE).is_file()))
+    if new == old:
+        print("README activity is already current.")
+        return
+    # Write beside the README and swap it in, so a crash never leaves half a file.
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="\n", dir=readme_path.parent, delete=False) as temp:
+        temp.write(new)
+    os.replace(temp.name, readme_path)
+    print(f'Updated README activity: {snapshot["totalContributions"]} contributions in the last year.')
 
 
 if __name__ == "__main__":
-    root = Path(__file__).resolve().parents[1]
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
-        raise SystemExit("No GITHUB_TOKEN. Run the Profile assets workflow on GitHub; no personal token is needed.")
-    refresh(root, token, os.environ.get("PROFILE_USERNAME", "ThanhBinh-IwtR"))
+        raise SystemExit("No GITHUB_TOKEN. Run the Profile activity workflow, or export a token to run locally.")
+    refresh(ROOT / "README.md", token, os.environ.get("PROFILE_USERNAME", "ThanhBinh-IwtR"))
