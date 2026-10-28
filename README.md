@@ -161,7 +161,7 @@ A beauty business website presenting services, pricing, imagery and booking cont
 
 | Contributions | Active days | Current streak | Longest streak | Public repos |
 | :---: | :---: | :---: | :---: | :---: |
-| **25** | 11 | 1 day | 3 days | 26 |
+| **26** | 12 | 2 days | 3 days | 26 |
 
 ```text
 Oct 2025    3  ██████████▌
@@ -176,10 +176,15 @@ Jun 2026    0  ·
 Jul 2026    7  ████████████████████████
 Aug 2026    0  ·
 Sep 2026    2  ███████
-Oct 2026    6  ████████████████████▌
+Oct 2026    7  ████████████████████████
 ```
 
 <sub>Oct 2025 – Oct 2026 · contributions per month from the public calendar of <a href="https://github.com/ThanhBinh-IwtR">ThanhBinh-IwtR</a> · checked daily by GitHub Actions</sub>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
+  <img src="assets/snake-light.svg" width="100%" alt="A snake eating the cells of the public GitHub contribution calendar">
+</picture>
 <!-- activity:end -->
 
 <br>
