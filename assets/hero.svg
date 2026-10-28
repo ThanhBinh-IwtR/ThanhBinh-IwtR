@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 208" width="880" height="208" role="img" aria-labelledby="title">
+<title id="title">Three aligned protein sequences named perception, reasoning and discovery. A detection box slides across the columns and locks onto the conserved motif T A B I, labelled tabi 0.98.</title>
+<style>
+  /* Mid-tone colours read on both GitHub themes, so one file serves light and dark. */
+  svg { --violet: #8b74d0; --mint: #3f9c8a; --mint-deep: #2f7d6e; --sky: #4c8dc4; --rose: #c0628a; --sand: #b08a3e; --slate: #768390; }
+  text { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+  .ruler, .name { fill: var(--slate); font-size: 11px; }
+  .name { font-size: 12px; text-anchor: end; }
+  .tick { stroke: var(--slate); stroke-opacity: .6; }
+  .seq { font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .gap { fill: var(--slate); fill-opacity: .7; }
+  .hyd { fill: var(--violet); } .pol { fill: var(--mint); } .bas { fill: var(--sky); }
+  .aci { fill: var(--rose); } .spe { fill: var(--sand); }
+  .cells path { fill-opacity: .16; }
+  .conservation { fill: var(--mint); fill-opacity: .38; }
+  .hit .cell, .hit .bar { fill: var(--violet); }
+  .hit text { fill: #fff; }
+  .frame { fill: var(--mint); fill-opacity: .06; stroke: var(--mint); stroke-width: 1.5; }
+  .corners { fill: none; stroke: var(--mint); stroke-width: 3; stroke-linecap: square; }
+  .tag rect { fill: var(--mint-deep); }
+  .tag text { fill: #fff; font-size: 11px; }
+
+  /* An 8 s loop: pause, slide one residue at a time, lock on and hold, then fade and start over. */
+  .box { animation: scan 8s infinite; }
+  .corners, .tag, .hit { animation: lock 8s infinite; }
+  @keyframes scan {
+    0%, 6% { transform: translateX(-420px); opacity: 1; animation-timing-function: steps(30, jump-end); }
+    40%, 86% { transform: translateX(0); opacity: 1; animation-timing-function: ease-in; }
+    92% { transform: translateX(0); opacity: 0; animation-timing-function: step-end; }
+    94% { transform: translateX(-420px); opacity: 0; animation-timing-function: ease-out; }
+    100% { transform: translateX(-420px); opacity: 1; }
+  }
+  @keyframes lock { 0%, 41% { opacity: 0; } 45%, 84% { opacity: 1; } 89%, 100% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .box, .corners, .tag, .hit { animation: none; } }
+</style>
+<g class="ruler">
+  <text x="138.5" y="19" text-anchor="middle">1</text>
+  <text x="264.5" y="19" text-anchor="middle">10</text>
+  <text x="404.5" y="19" text-anchor="middle">20</text>
+  <text x="544.5" y="19" text-anchor="middle">30</text>
+  <text x="684.5" y="19" text-anchor="middle">40</text>
+  <text x="824.5" y="19" text-anchor="middle">50</text>
+</g>
+<path class="tick" d="M138.5 25V33M194.5 29V33M264.5 25V33M334.5 29V33M404.5 25V33M474.5 29V33M544.5 25V33M614.5 29V33M684.5 25V33M754.5 29V33M824.5 25V33"/>
+<text class="name" x="120" y="74">perception</text>
+<text class="name" x="120" y="104">reasoning</text>
+<text class="name" x="120" y="134">discovery</text>
+<text class="name" x="120" y="190">conservation</text>
+<g class="cells">
+  <path class="hyd" d="M132 58h13v24h-13zM230 58h13v24h-13zM286 58h13v24h-13zM300 58h13v24h-13zM314 58h13v24h-13zM356 58h13v24h-13zM426 58h13v24h-13zM440 58h13v24h-13zM468 58h13v24h-13zM482 58h13v24h-13zM496 58h13v24h-13zM510 58h13v24h-13zM566 58h13v24h-13zM594 58h13v24h-13zM636 58h13v24h-13zM706 58h13v24h-13zM720 58h13v24h-13zM734 58h13v24h-13zM748 58h13v24h-13zM846 58h13v24h-13zM132 88h13v24h-13zM230 88h13v24h-13zM286 88h13v24h-13zM398 88h13v24h-13zM426 88h13v24h-13zM440 88h13v24h-13zM482 88h13v24h-13zM496 88h13v24h-13zM524 88h13v24h-13zM566 88h13v24h-13zM594 88h13v24h-13zM622 88h13v24h-13zM706 88h13v24h-13zM720 88h13v24h-13zM734 88h13v24h-13zM748 88h13v24h-13zM790 88h13v24h-13zM846 88h13v24h-13zM132 118h13v24h-13zM174 118h13v24h-13zM230 118h13v24h-13zM244 118h13v24h-13zM272 118h13v24h-13zM286 118h13v24h-13zM300 118h13v24h-13zM314 118h13v24h-13zM342 118h13v24h-13zM370 118h13v24h-13zM412 118h13v24h-13zM426 118h13v24h-13zM440 118h13v24h-13zM468 118h13v24h-13zM482 118h13v24h-13zM496 118h13v24h-13zM566 118h13v24h-13zM594 118h13v24h-13zM636 118h13v24h-13zM706 118h13v24h-13zM720 118h13v24h-13zM734 118h13v24h-13zM846 118h13v24h-13z"/>
+  <path class="pol" d="M146 58h13v24h-13zM160 58h13v24h-13zM188 58h13v24h-13zM202 58h13v24h-13zM216 58h13v24h-13zM244 58h13v24h-13zM454 58h13v24h-13zM524 58h13v24h-13zM538 58h13v24h-13zM552 58h13v24h-13zM580 58h13v24h-13zM622 58h13v24h-13zM776 58h13v24h-13zM804 58h13v24h-13zM160 88h13v24h-13zM188 88h13v24h-13zM216 88h13v24h-13zM244 88h13v24h-13zM328 88h13v24h-13zM384 88h13v24h-13zM454 88h13v24h-13zM468 88h13v24h-13zM538 88h13v24h-13zM552 88h13v24h-13zM580 88h13v24h-13zM636 88h13v24h-13zM776 88h13v24h-13zM804 88h13v24h-13zM146 118h13v24h-13zM160 118h13v24h-13zM188 118h13v24h-13zM356 118h13v24h-13zM454 118h13v24h-13zM524 118h13v24h-13zM538 118h13v24h-13zM552 118h13v24h-13zM580 118h13v24h-13zM622 118h13v24h-13zM678 118h13v24h-13zM804 118h13v24h-13z"/>
+  <path class="bas" d="M258 58h13v24h-13zM342 58h13v24h-13zM398 58h13v24h-13zM412 58h13v24h-13zM608 58h13v24h-13zM692 58h13v24h-13zM202 88h13v24h-13zM258 88h13v24h-13zM342 88h13v24h-13zM370 88h13v24h-13zM412 88h13v24h-13zM608 88h13v24h-13zM650 88h13v24h-13zM692 88h13v24h-13zM258 118h13v24h-13zM398 118h13v24h-13zM608 118h13v24h-13zM692 118h13v24h-13z"/>
+  <path class="aci" d="M272 58h13v24h-13zM328 58h13v24h-13zM762 58h13v24h-13zM272 88h13v24h-13zM356 88h13v24h-13zM762 88h13v24h-13zM216 118h13v24h-13z"/>
+  <path class="spe" d="M174 58h13v24h-13zM370 58h13v24h-13zM384 58h13v24h-13zM650 58h13v24h-13zM664 58h13v24h-13zM678 58h13v24h-13zM790 58h13v24h-13zM818 58h13v24h-13zM832 58h13v24h-13zM146 88h13v24h-13zM174 88h13v24h-13zM510 88h13v24h-13zM664 88h13v24h-13zM678 88h13v24h-13zM818 88h13v24h-13zM832 88h13v24h-13zM328 118h13v24h-13zM384 118h13v24h-13zM510 118h13v24h-13zM650 118h13v24h-13zM664 118h13v24h-13zM790 118h13v24h-13zM818 118h13v24h-13zM832 118h13v24h-13z"/>
+</g>
+<text class="seq" y="75"><tspan class="hyd" x="138.5 236.5 292.5 306.5 320.5 362.5 432.5 446.5 474.5 488.5 502.5 516.5 572.5 600.5 642.5 712.5 726.5 740.5 754.5 852.5">MLIWIALAALMAAIFVLFAA</tspan><tspan class="pol" x="152.5 166.5 194.5 208.5 222.5 250.5 460.5 530.5 544.5 558.5 586.5 628.5 782.5 810.5">TQTTQNNTSTBTSS</tspan><tspan class="bas" x="264.5 348.5 404.5 418.5 614.5 698.5">KRRKRH</tspan><tspan class="aci" x="278.5 334.5 768.5">EED</tspan><tspan class="spe" x="180.5 376.5 390.5 656.5 670.5 684.5 796.5 824.5 838.5">PYCYYGGPG</tspan></text>
+<text class="seq" y="105"><tspan class="hyd" x="138.5 236.5 292.5 404.5 432.5 446.5 488.5 502.5 530.5 572.5 600.5 628.5 712.5 726.5 740.5 754.5 796.5 852.5">MIMFLALMFAIAVLFLLA</tspan><tspan class="pol" x="166.5 194.5 222.5 250.5 334.5 390.5 460.5 474.5 544.5 558.5 586.5 642.5 782.5 810.5">QTQNQSNSSTBQSS</tspan><tspan class="bas" x="208.5 264.5 348.5 376.5 418.5 614.5 656.5 698.5">KKRKKRKH</tspan><tspan class="aci" x="278.5 362.5 768.5">EDD</tspan><tspan class="spe" x="152.5 180.5 516.5 670.5 684.5 824.5 838.5">PPYYGPP</tspan><tspan class="gap" x="306.5 320.5">--</tspan></text>
+<text class="seq" y="135"><tspan class="hyd" x="138.5 180.5 236.5 250.5 278.5 292.5 306.5 320.5 348.5 376.5 418.5 432.5 446.5 474.5 488.5 502.5 572.5 600.5 642.5 712.5 726.5 740.5 852.5">MALLLIWIALVLAALAAIFVLFA</tspan><tspan class="pol" x="152.5 166.5 194.5 362.5 460.5 530.5 544.5 558.5 586.5 628.5 684.5 810.5">TQTSNTSTBTNS</tspan><tspan class="bas" x="264.5 404.5 614.5 698.5">KRKH</tspan><tspan class="aci" x="222.5">E</tspan><tspan class="spe" x="334.5 390.5 516.5 656.5 670.5 796.5 824.5 838.5">PCPYYGPG</tspan><tspan class="gap" x="208.5 754.5 768.5 782.5">----</tspan></text>
+<path class="conservation" d="M134 162h9V196h-9zM148 173.333h9V196h-9zM162 162h9V196h-9zM176 173.333h9V196h-9zM190 162h9V196h-9zM204 184.667h9V196h-9zM218 173.333h9V196h-9zM232 173.333h9V196h-9zM246 173.333h9V196h-9zM260 162h9V196h-9zM274 173.333h9V196h-9zM288 173.333h9V196h-9zM302 173.333h9V196h-9zM316 173.333h9V196h-9zM330 184.667h9V196h-9zM344 173.333h9V196h-9zM358 184.667h9V196h-9zM372 184.667h9V196h-9zM386 173.333h9V196h-9zM400 173.333h9V196h-9zM414 173.333h9V196h-9zM428 162h9V196h-9zM442 162h9V196h-9zM456 162h9V196h-9zM470 173.333h9V196h-9zM484 162h9V196h-9zM498 173.333h9V196h-9zM512 184.667h9V196h-9zM526 173.333h9V196h-9zM540 162h9V196h-9zM554 162h9V196h-9zM568 162h9V196h-9zM582 162h9V196h-9zM596 162h9V196h-9zM610 173.333h9V196h-9zM624 173.333h9V196h-9zM638 173.333h9V196h-9zM652 173.333h9V196h-9zM666 162h9V196h-9zM680 173.333h9V196h-9zM694 162h9V196h-9zM708 162h9V196h-9zM722 162h9V196h-9zM736 162h9V196h-9zM750 184.667h9V196h-9zM764 173.333h9V196h-9zM778 173.333h9V196h-9zM792 173.333h9V196h-9zM806 162h9V196h-9zM820 162h9V196h-9zM834 173.333h9V196h-9zM848 162h9V196h-9z"/>
+<g class="hit">
+  <path class="cell" d="M552 58h13v24h-13zM566 58h13v24h-13zM580 58h13v24h-13zM594 58h13v24h-13zM552 88h13v24h-13zM566 88h13v24h-13zM580 88h13v24h-13zM594 88h13v24h-13zM552 118h13v24h-13zM566 118h13v24h-13zM580 118h13v24h-13zM594 118h13v24h-13z"/>
+  <path class="bar" d="M554 162h9V196h-9zM568 162h9V196h-9zM582 162h9V196h-9zM596 162h9V196h-9z"/>
+  <text class="seq" x="558.5 572.5 586.5 600.5" y="75">TABI</text>
+  <text class="seq" x="558.5 572.5 586.5 600.5" y="105">TABI</text>
+  <text class="seq" x="558.5 572.5 586.5 600.5" y="135">TABI</text>
+</g>
+<g class="box">
+  <rect class="frame" x="548" y="52" width="63" height="96" rx="2"/>
+  <path class="corners" d="M548 62V52H558M601 52H611V62M611 138V148H601M558 148H548V138"/>
+  <g class="tag"><rect x="547.25" y="35" width="70" height="17" rx="1"/><text x="554" y="47.5">tabi 0.98</text></g>
+</g>
+</svg>

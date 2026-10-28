@@ -2,6 +2,7 @@ import copy
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -14,7 +15,7 @@ def calendar_body(first, counts, repos=26):
     start = date.fromisoformat(first)
     days = [{"date": (start + timedelta(days=i)).isoformat(), "contributionCount": n} for i, n in enumerate(counts)]
     weeks = [{"contributionDays": days[i:i+7]} for i in range(0, len(days), 7)]
-    return {"data": {"user": {"repositories": {"totalCount": repos}, "contributionsCollection": {
+    return {"data": {"user": {"repositories": {"totalCount": repos, "nodes": []}, "contributionsCollection": {
         "contributionCalendar": {"totalContributions": sum(counts), "weeks": weeks}}}}}
 
 
@@ -33,22 +34,25 @@ class ActivityTests(unittest.TestCase):
         from update_activity import read_snapshot, streaks
         self.assertEqual(streaks(read_snapshot(BODY)["days"]), (0, 2))
 
-    def test_monthly_totals_keep_partial_months_and_their_year(self):
-        from update_activity import monthly, read_snapshot
-        self.assertEqual(monthly(read_snapshot(BODY)["days"]), [("Sep 2026", 3), ("Oct 2026", 12)])
-
-    def test_bars_scale_to_the_busiest_month(self):
-        from update_activity import bar
-        self.assertEqual(bar(0, 7), "·")
-        self.assertEqual(bar(7, 7, width=4), "████")
-        self.assertEqual(bar(1, 8, width=4), "▌")
-
-    def test_render_is_plain_markdown_with_real_numbers(self):
+    def test_render_keeps_the_numbers_as_markdown_text(self):
         from update_activity import read_snapshot, render
         block = render(read_snapshot(BODY), "ThanhBinh-IwtR")
         self.assertIn("| **15** | 5 | 0 days | 2 days | 26 |", block)
-        self.assertIn("Oct 2026   12  ████████████████████████", block)
-        self.assertNotIn("<img", block)
+        self.assertIn('alt="Contributions per day from 28 Sep 2026 to 30 Oct 2026: 15 in total, most on 28 Oct 2026 (5)."', block)
+
+    def test_activity_track_has_one_bar_per_active_day_and_marks_months(self):
+        from update_activity import activity_svg, read_snapshot
+        root = ET.fromstring(activity_svg(read_snapshot(BODY)))
+        bars = next(node for node in root.iter() if node.get("class") == "day").get("d")
+        self.assertEqual(bars.count("M"), 5)
+        labels = [node.text for node in root.iter() if node.tag.endswith("text")]
+        self.assertIn("Oct", labels)
+        self.assertIn("5 on 28 Oct", labels)
+
+    def test_activity_track_survives_a_year_without_contributions(self):
+        from update_activity import activity_svg, read_snapshot
+        root = ET.fromstring(activity_svg(read_snapshot(calendar_body("2026-01-01", [0] * 30))))
+        self.assertEqual(next(node for node in root.iter() if node.get("class") == "day").get("d"), "")
 
     def test_splice_rewrites_only_the_generated_block(self):
         from update_activity import splice
@@ -92,10 +96,13 @@ class ActivityTests(unittest.TestCase):
                 refresh(readme, "not-a-real-token", "ThanhBinh-IwtR", fetcher=fail)
             self.assertEqual(readme.read_text(encoding="utf-8"), README)
 
+            self.assertFalse((Path(temp) / "assets/activity.svg").exists())
+
             refresh(readme, "not-a-real-token", "ThanhBinh-IwtR", fetcher=lambda *_args: BODY)
             updated = readme.read_text(encoding="utf-8")
             self.assertIn("| **15** |", updated)
             self.assertTrue(updated.endswith("Hand-written footer.\n"))
+            ET.parse(Path(temp) / "assets/activity.svg")
 
     def test_snake_appears_only_after_the_workflow_draws_it(self):
         from update_activity import refresh
@@ -104,7 +111,6 @@ class ActivityTests(unittest.TestCase):
             readme.write_text(README, encoding="utf-8")
             refresh(readme, "not-a-real-token", "ThanhBinh-IwtR", fetcher=lambda *_args: BODY)
             self.assertNotIn("snake-light.svg", readme.read_text(encoding="utf-8"))
-            (Path(temp) / "assets").mkdir()
             (Path(temp) / "assets/snake-light.svg").write_text("<svg/>", encoding="utf-8")
             refresh(readme, "not-a-real-token", "ThanhBinh-IwtR", fetcher=lambda *_args: BODY)
             self.assertIn('srcset="assets/snake-dark.svg"', readme.read_text(encoding="utf-8"))

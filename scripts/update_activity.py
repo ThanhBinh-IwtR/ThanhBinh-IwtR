@@ -1,7 +1,7 @@
-"""Write public GitHub activity into README.md as plain Markdown. Standard library only.
+"""Write public GitHub activity into README.md, assets/activity.svg and assets/fields.svg.
 
-Only the block between the activity markers is generated; the rest of the README is
-edited by hand. Needs a token (the Actions token is enough) to read the calendar.
+Standard library only. Only the block between the activity markers is generated; the rest of the
+README is edited by hand. Needs a token (the Actions token is enough) to read GitHub's GraphQL API.
 """
 from datetime import date, timedelta
 from pathlib import Path
@@ -9,19 +9,39 @@ import json
 import os
 import tempfile
 import urllib.request
+from fields import field_shares, fields_svg
 
 ROOT = Path(__file__).resolve().parents[1]
 START, END = "<!-- activity:start -->", "<!-- activity:end -->"
 MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
-BAR_WIDTH = 24
+ACTIVITY, FIELDS = "assets/activity.svg", "assets/fields.svg"
+# Same mid-tone tokens and left gutter as assets/hero.svg, so the track reads in both themes.
+TRACK_STYLE = """<style>
+  svg { --violet: #8b74d0; --slate: #768390; }
+  text { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 11px; fill: var(--slate); }
+  .name { font-size: 12px; text-anchor: end; }
+  .axis { fill: none; stroke: var(--slate); stroke-opacity: .5; }
+  .day { fill: var(--violet); }
+</style>"""
 SNAKE = "assets/snake-light.svg"
 SNAKE_PICTURE = """<picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/snake-dark.svg">
   <img src="assets/snake-light.svg" width="100%" alt="A snake eating the cells of the public GitHub contribution calendar">
 </picture>"""
-QUERY = """query($login:String!){
+ID_QUERY = "query($login:String!){user(login:$login){id}}"
+QUERY = """query($login:String!,$id:ID!){
   user(login:$login){
-    repositories(privacy:PUBLIC,ownerAffiliations:[OWNER]){totalCount}
+    repositories(first:100,privacy:PUBLIC,ownerAffiliations:[OWNER],orderBy:{field:PUSHED_AT,direction:DESC}){
+      totalCount
+      nodes{
+        name isFork description
+        repositoryTopics(first:20){nodes{topic{name}}}
+        languages(first:5,orderBy:{field:SIZE,direction:DESC}){edges{size node{name}}}
+        readme:object(expression:"HEAD:README.md"){...on Blob{text}}
+        readmeLower:object(expression:"HEAD:readme.md"){...on Blob{text}}
+        defaultBranchRef{target{...on Commit{history(first:100,author:{id:$id}){totalCount nodes{committedDate}}}}}
+      }
+    }
     contributionsCollection{contributionCalendar{
       totalContributions weeks{contributionDays{date contributionCount}}
     }}
@@ -29,12 +49,20 @@ QUERY = """query($login:String!){
 }"""
 
 
-def fetch_calendar(token, username):
-    payload = json.dumps({"query": QUERY, "variables": {"login": username}}).encode()
+def graphql(token, query, variables):
+    payload = json.dumps({"query": query, "variables": variables}).encode()
     request = urllib.request.Request("https://api.github.com/graphql", data=payload,
         headers={"Authorization": "Bearer " + token, "Content-Type": "application/json", "User-Agent": "Tabi-Profile"})
     with urllib.request.urlopen(request, timeout=45) as response:
         return json.load(response)
+
+
+def fetch_profile(token, username):
+    """Calendar, repositories and my commits in each; commits are matched to my account id."""
+    user = (graphql(token, ID_QUERY, {"login": username}).get("data") or {}).get("user")
+    if not user:
+        raise RuntimeError("GitHub did not return the account id; README is unchanged.")
+    return graphql(token, QUERY, {"login": username, "id": user["id"]})
 
 
 def read_snapshot(body):
@@ -54,7 +82,7 @@ def read_snapshot(body):
         raise ValueError("Invalid contribution count")
     if sum(count for _, count in days) != calendar["totalContributions"]:
         raise ValueError("Calendar total does not match contribution total")
-    return {"publicRepositories": user["repositories"]["totalCount"],
+    return {"publicRepositories": user["repositories"]["totalCount"], "repositories": user["repositories"]["nodes"],
             "totalContributions": calendar["totalContributions"], "days": days}
 
 
@@ -76,27 +104,47 @@ def streaks(days):
     return current, longest
 
 
-def monthly(days):
-    totals = {}
-    for stamp, count in days:
-        key = f"{MONTHS[stamp.month-1]} {stamp.year}"
-        totals[key] = totals.get(key, 0) + count
-    return list(totals.items())
+def day_label(stamp):
+    return f"{stamp.day} {MONTHS[stamp.month-1]} {stamp.year}"
 
 
-def bar(value, peak, width=BAR_WIDTH):
-    if not value:
-        return "·"
-    halves = max(1, round(value / peak * width * 2))
-    return "█" * (halves // 2) + "▌" * (halves % 2)
+def summary(snapshot):
+    days = snapshot["days"]
+    peak_day, peak = max(days, key=lambda d: (d[1], d[0]))
+    text = (f'Contributions per day from {day_label(days[0][0])} to {day_label(days[-1][0])}: '
+            f'{snapshot["totalContributions"]} in total')
+    return text + (f", most on {day_label(peak_day)} ({peak})." if peak else ".")
+
+
+def activity_svg(snapshot):
+    """A coverage track with one bar per day, lined up under the rows of assets/hero.svg."""
+    days = snapshot["days"]
+    left, width, base = 132, 728, 76
+    x = lambda i: left + (i + .5) * width / len(days)
+    peak_day, peak = max(days, key=lambda d: (d[1], d[0]))
+    bars = "".join(f"M{x(i) - 2:.1f} {base}v{-8 - 48 * count / peak:.1f}h4V{base}z"
+                   for i, (_, count) in enumerate(days) if count)
+    ticks, labels = f"M{left} {base}H{left + width}", []
+    for i, (stamp, _) in enumerate(days):
+        if stamp.day == 1:
+            ticks += f"M{x(i):.1f} {base}v5"
+            labels.append(f'<text x="{x(i):.1f}" y="{base + 19}">{MONTHS[stamp.month-1]}</text>')
+            if stamp.month == 1 or len(labels) == 1:
+                labels.append(f'<text x="{x(i):.1f}" y="{base + 33}">{stamp.year}</text>')
+    if peak:
+        at = min(max(x(days.index((peak_day, peak))), left + 40), left + width - 40)
+        labels.append(f'<text x="{at:.1f}" y="11" text-anchor="middle">{peak} on {peak_day.day} {MONTHS[peak_day.month-1]}</text>')
+    return "\n".join([
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 116" width="880" height="116" role="img" aria-labelledby="title">',
+        f'<title id="title">{summary(snapshot)}</title>', TRACK_STYLE,
+        f'<text class="name" x="{left - 12}" y="{base}">contributions</text>',
+        f'<path class="axis" d="{ticks}"/>', f'<path class="day" d="{bars}"/>', *labels, "</svg>", ""])
 
 
 def render(snapshot, username, snake=False):
     """The generated block; the snake is shown once the workflow has drawn it."""
     current, longest = streaks(snapshot["days"])
     active = sum(1 for _, count in snapshot["days"] if count)
-    months = monthly(snapshot["days"])
-    peak = max(total for _, total in months) or 1
     days = lambda n: f"{n} day" + ("" if n == 1 else "s")
     return "\n".join([
         "<!-- Generated by scripts/update_activity.py; edits inside this block are overwritten. -->",
@@ -105,12 +153,10 @@ def render(snapshot, username, snake=False):
         "| :---: | :---: | :---: | :---: | :---: |",
         f'| **{snapshot["totalContributions"]}** | {active} | {days(current)} | {days(longest)} | {snapshot["publicRepositories"]} |',
         "",
-        "```text",
-        *(f"{label}  {total:>3}  {bar(total, peak)}" for label, total in months),
-        "```",
+        f'<img src="{ACTIVITY}" width="100%" alt="{summary(snapshot)}">',
         "",
-        f'<sub>{months[0][0]} – {months[-1][0]} · contributions per month from the public calendar of '
-        f'<a href="https://github.com/{username}">{username}</a> · checked daily by GitHub Actions</sub>',
+        f'<sub>The last 12 months on the public contribution calendar of <a href="https://github.com/{username}">{username}</a>, '
+        "checked daily by GitHub Actions.</sub>",
         *(["", SNAKE_PICTURE] if snake else []),
     ])
 
@@ -122,18 +168,29 @@ def splice(readme, block):
     return head + START + "\n" + block + "\n" + END + rest.split(END, 1)[1]
 
 
-def refresh(readme_path, token, username, fetcher=fetch_calendar):
+def write_if_changed(path, text):
+    if path.is_file() and path.read_text(encoding="utf-8") == text:
+        return False
+    # Write beside the target and swap it in, so a crash never leaves half a file.
+    path.parent.mkdir(exist_ok=True)
+    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="\n", dir=path.parent, delete=False) as temp:
+        temp.write(text)
+    os.replace(temp.name, path)
+    return True
+
+
+def refresh(readme_path, token, username, fetcher=fetch_profile):
     readme_path = Path(readme_path)
+    root = readme_path.parent
     snapshot = read_snapshot(fetcher(token, username))
-    old = readme_path.read_text(encoding="utf-8")
-    new = splice(old, render(snapshot, username, (readme_path.parent / SNAKE).is_file()))
-    if new == old:
+    readme = splice(readme_path.read_text(encoding="utf-8"), render(snapshot, username, (root / SNAKE).is_file()))
+    shares = field_shares(snapshot["repositories"], snapshot["days"][-1][0], username)
+    changed = write_if_changed(root / ACTIVITY, activity_svg(snapshot))
+    changed = write_if_changed(root / FIELDS, fields_svg(shares)) or changed
+    changed = write_if_changed(readme_path, readme) or changed
+    if not changed:
         print("README activity is already current.")
         return
-    # Write beside the README and swap it in, so a crash never leaves half a file.
-    with tempfile.NamedTemporaryFile("w", encoding="utf-8", newline="\n", dir=readme_path.parent, delete=False) as temp:
-        temp.write(new)
-    os.replace(temp.name, readme_path)
     print(f'Updated README activity: {snapshot["totalContributions"]} contributions in the last year.')
 
 

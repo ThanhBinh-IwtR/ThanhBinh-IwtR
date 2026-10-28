@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 180" width="440" height="180" role="img" aria-labelledby="title">
+<title id="title">A floor in perspective shaded by estimated depth, with a chair detected at 0.9 metres, a person at 2.4 metres, and a sound wave for the spoken guidance.</title>
+<style>
+  svg { --violet: #8b74d0; --mint: #3f9c8a; --mint-deep: #2f7d6e; --sky: #4c8dc4; --sky-deep: #3b78ad; --slate: #768390; }
+  text { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 11px; }
+  .floor { fill: none; stroke: url(#depth); }
+  .horizon { stroke: var(--slate); stroke-opacity: .35; }
+  .frame { fill-opacity: .07; stroke-width: 1.5; }
+  .corners { fill: none; stroke-width: 3; stroke-linecap: square; }
+  .near .frame, .near .corners { stroke: var(--mint); } .near .frame { fill: var(--mint); }
+  .far .frame, .far .corners { stroke: var(--sky); } .far .frame { fill: var(--sky); }
+  .tag text { fill: #fff; } .tag.near rect { fill: var(--mint-deep); } .tag.far rect { fill: var(--sky-deep); }
+  .object { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .chair { stroke: var(--mint); } .person { stroke: var(--sky); }
+  .wave { stroke: var(--violet); stroke-width: 3; stroke-linecap: round; }
+</style>
+<defs><linearGradient id="depth" gradientUnits="userSpaceOnUse" x1="0" y1="62" x2="0" y2="180">
+  <stop offset="0" stop-color="#8b74d0" stop-opacity=".12"/><stop offset="1" stop-color="#3f9c8a" stop-opacity=".8"/>
+</linearGradient></defs>
+<path class="horizon" d="M24 62H416"/>
+<path class="floor" d="M220 62L-220 180M220 62L-110 180M220 62L0 180M220 62L110 180M220 62L220 180M220 62L330 180M220 62L440 180M220 62L550 180M220 62L660 180M0 76.2H440M0 91.5H440M0 113.9H440M0 144.6H440"/>
+<g class="object person"><circle cx="287" cy="65" r="6"/><path d="M280 98V82q0-6 7-6t7 6v16M284 98l-1 19M290 98l1 19"/></g>
+<g class="object chair"><path d="M98 126V96q0-4 4-4h36q4 0 4 4v30M90 130h60M96 132l-2 38M144 132l2 38M106 134v24M134 134v24"/></g>
+<g class="near"><rect class="frame" x="84" y="86" width="74" height="89" rx="2"/><path class="corners" d="M84 95V86H93M149 86H158V95M158 166V175H149M93 175H84V166"/></g><g class="tag near"><rect x="83.2" y="69" width="85.7" height="17" rx="1"/><text x="90" y="81.5">chair 0.9 m</text></g>
+<g class="far"><rect class="frame" x="268" y="52" width="38" height="69" rx="2"/><path class="corners" d="M268 61V52H277M297 52H306V61M306 112V121H297M277 121H268V112"/></g><g class="tag far"><rect x="267.2" y="35" width="92.4" height="17" rx="1"/><text x="274" y="47.5">person 2.4 m</text></g>
+<path class="wave" d="M334 153v6M340.5 150v12M347 146v20M353.5 151v10M360 143v26M366.5 148v16M373 152v8M379.5 145v22M386 149v14M392.5 142v28M399 150v12M405.5 147v18M412 152v8M418.5 154v4"/>
+</svg>
