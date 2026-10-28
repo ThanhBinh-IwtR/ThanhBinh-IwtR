@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 360" width="440" height="360" role="img" aria-labelledby="title">
-<title id="title">Share of my recent commits by field: Computer vision 17%, Bioinformatics 9%, NLP and speech 9%, Agentic AI 0%, Web 59%, Data science 6%.</title>
+<title id="title">Share of my recent commits by field: Computer vision 17%, Bioinformatics 8%, NLP and speech 9%, Agentic AI 0%, Web 60%, Data science 6%.</title>
 <style>
   svg { --violet: #8b74d0; --mint: #3f9c8a; --slate: #768390; }
   text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
@@ -10,23 +10,23 @@
   .value { fill: var(--violet); font-size: 13px; font-weight: 600; }
 </style>
 <path class="grid" d="M220.0 157.0L243.4 170.5L243.4 197.5L220.0 211.0L196.6 197.5L196.6 170.5ZM220.0 130.0L266.8 157.0L266.8 211.0L220.0 238.0L173.2 211.0L173.2 157.0ZM220.0 103.0L290.1 143.5L290.1 224.5L220.0 265.0L149.9 224.5L149.9 143.5ZM220.0 76.0L313.5 130.0L313.5 238.0L220.0 292.0L126.5 238.0L126.5 130.0ZM220 184L220.0 76.0M220 184L313.5 130.0M220 184L313.5 238.0M220 184L220.0 292.0M220 184L126.5 238.0M220 184L126.5 130.0"/>
-<path class="share" d="M220.0 125.7L256.1 163.2L257.3 205.5L220.0 184.0L126.5 238.0L190.3 166.8Z"/>
-<circle class="point" cx="220.0" cy="125.7" r="3.5"/>
-<circle class="point" cx="256.1" cy="163.2" r="3.5"/>
-<circle class="point" cx="257.3" cy="205.5" r="3.5"/>
+<path class="share" d="M220.0 126.4L254.1 164.3L257.0 205.4L220.0 184.0L126.5 238.0L190.3 166.9Z"/>
+<circle class="point" cx="220.0" cy="126.4" r="3.5"/>
+<circle class="point" cx="254.1" cy="164.3" r="3.5"/>
+<circle class="point" cx="257.0" cy="205.4" r="3.5"/>
 <circle class="point" cx="220.0" cy="184.0" r="3.5"/>
 <circle class="point" cx="126.5" cy="238.0" r="3.5"/>
-<circle class="point" cx="190.3" cy="166.8" r="3.5"/>
+<circle class="point" cx="190.3" cy="166.9" r="3.5"/>
 <text class="name" x="220.0" y="42.0" text-anchor="middle">Computer vision</text>
 <text class="value" x="220.0" y="58.0" text-anchor="middle">17%</text>
 <text class="name" x="329.1" y="118.0" text-anchor="start">Bioinformatics</text>
-<text class="value" x="329.1" y="134.0" text-anchor="start">9%</text>
+<text class="value" x="329.1" y="134.0" text-anchor="start">8%</text>
 <text class="name" x="329.1" y="244.0" text-anchor="start">NLP and speech</text>
 <text class="value" x="329.1" y="260.0" text-anchor="start">9%</text>
 <text class="name" x="220.0" y="320.0" text-anchor="middle">Agentic AI</text>
 <text class="value" x="220.0" y="336.0" text-anchor="middle">0%</text>
 <text class="name" x="110.9" y="244.0" text-anchor="end">Web</text>
-<text class="value" x="110.9" y="260.0" text-anchor="end">59%</text>
+<text class="value" x="110.9" y="260.0" text-anchor="end">60%</text>
 <text class="name" x="110.9" y="118.0" text-anchor="end">Data science</text>
 <text class="value" x="110.9" y="134.0" text-anchor="end">6%</text>
 </svg>
