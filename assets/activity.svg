@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 116" width="880" height="116" role="img" aria-labelledby="title">
-<title id="title">Contributions per day from 2 Nov 2025 to 5 Nov 2026: 24 in total, most on 14 Jul 2026 (6).</title>
+<title id="title">Contributions per day from 2 Nov 2025 to 6 Nov 2026: 24 in total, most on 14 Jul 2026 (6).</title>
 <style>
   svg { --violet: #8b74d0; --slate: #768390; }
   text { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 11px; fill: var(--slate); }
@@ -8,21 +8,21 @@
   .day { fill: var(--violet); }
 </style>
 <text class="name" x="120" y="76">contributions</text>
-<path class="axis" d="M132 76H860M190.2 76v5M251.4 76v5M312.5 76v5M367.8 76v5M428.9 76v5M488.1 76v5M549.3 76v5M608.5 76v5M669.6 76v5M730.8 76v5M790.0 76v5M851.1 76v5"/>
-<path class="day" d="M424.9 76v-40.0h4V76zM426.9 76v-16.0h4V76zM428.9 76v-24.0h4V76zM618.3 76v-16.0h4V76zM632.1 76v-56.0h4V76zM762.3 76v-16.0h4V76zM764.3 76v-16.0h4V76zM797.8 76v-24.0h4V76zM837.3 76v-40.0h4V76zM839.3 76v-16.0h4V76zM843.2 76v-16.0h4V76z"/>
-<text x="190.2" y="95">Dec</text>
-<text x="190.2" y="109">2025</text>
-<text x="251.4" y="95">Jan</text>
-<text x="251.4" y="109">2026</text>
-<text x="312.5" y="95">Feb</text>
-<text x="367.8" y="95">Mar</text>
-<text x="428.9" y="95">Apr</text>
-<text x="488.1" y="95">May</text>
-<text x="549.3" y="95">Jun</text>
-<text x="608.5" y="95">Jul</text>
-<text x="669.6" y="95">Aug</text>
-<text x="730.8" y="95">Sep</text>
-<text x="790.0" y="95">Oct</text>
-<text x="851.1" y="95">Nov</text>
-<text x="634.1" y="11" text-anchor="middle">6 on 14 Jul</text>
+<path class="axis" d="M132 76H860M190.0 76v5M251.0 76v5M312.0 76v5M367.1 76v5M428.1 76v5M487.1 76v5M548.1 76v5M607.2 76v5M668.2 76v5M729.2 76v5M788.2 76v5M849.2 76v5"/>
+<path class="day" d="M424.2 76v-40.0h4V76zM426.1 76v-16.0h4V76zM428.1 76v-24.0h4V76zM617.0 76v-16.0h4V76zM630.7 76v-56.0h4V76zM760.6 76v-16.0h4V76zM762.6 76v-16.0h4V76zM796.0 76v-24.0h4V76zM835.4 76v-40.0h4V76zM837.3 76v-16.0h4V76zM841.3 76v-16.0h4V76z"/>
+<text x="190.0" y="95">Dec</text>
+<text x="190.0" y="109">2025</text>
+<text x="251.0" y="95">Jan</text>
+<text x="251.0" y="109">2026</text>
+<text x="312.0" y="95">Feb</text>
+<text x="367.1" y="95">Mar</text>
+<text x="428.1" y="95">Apr</text>
+<text x="487.1" y="95">May</text>
+<text x="548.1" y="95">Jun</text>
+<text x="607.2" y="95">Jul</text>
+<text x="668.2" y="95">Aug</text>
+<text x="729.2" y="95">Sep</text>
+<text x="788.2" y="95">Oct</text>
+<text x="849.2" y="95">Nov</text>
+<text x="632.7" y="11" text-anchor="middle">6 on 14 Jul</text>
 </svg>
