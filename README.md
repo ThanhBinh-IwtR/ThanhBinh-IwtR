@@ -166,7 +166,7 @@ Website for a beauty business, with its services, pricing and a way to book.
 | :---: | :---: | :---: | :---: | :---: |
 | **24** | 11 | 0 days | 3 days | 26 |
 
-<img src="assets/activity.svg" width="100%" alt="Contributions per day from 2 Nov 2025 to 7 Nov 2026: 24 in total, most on 14 Jul 2026 (6).">
+<img src="assets/activity.svg" width="100%" alt="Contributions per day from 9 Nov 2025 to 8 Nov 2026: 24 in total, most on 14 Jul 2026 (6).">
 
 <sub>The last 12 months on the public contribution calendar of <a href="https://github.com/ThanhBinh-IwtR">ThanhBinh-IwtR</a>, checked daily by GitHub Actions.</sub>
 
