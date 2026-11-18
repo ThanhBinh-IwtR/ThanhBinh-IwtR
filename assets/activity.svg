@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 116" width="880" height="116" role="img" aria-labelledby="title">
-<title id="title">Contributions per day from 16 Nov 2025 to 17 Nov 2026: 24 in total, most on 14 Jul 2026 (6).</title>
+<title id="title">Contributions per day from 16 Nov 2025 to 18 Nov 2026: 24 in total, most on 14 Jul 2026 (6).</title>
 <style>
   svg { --violet: #8b74d0; --slate: #768390; }
   text { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 11px; fill: var(--slate); }
@@ -8,21 +8,21 @@
   .day { fill: var(--violet); }
 </style>
 <text class="name" x="120" y="76">contributions</text>
-<path class="axis" d="M132 76H860M162.7 76v5M224.2 76v5M285.7 76v5M341.3 76v5M402.8 76v5M462.3 76v5M523.8 76v5M583.3 76v5M644.8 76v5M706.3 76v5M765.8 76v5M827.3 76v5"/>
-<path class="day" d="M398.8 76v-40.0h4V76zM400.8 76v-16.0h4V76zM402.8 76v-24.0h4V76zM593.2 76v-16.0h4V76zM607.1 76v-56.0h4V76zM738.0 76v-16.0h4V76zM740.0 76v-16.0h4V76zM773.7 76v-24.0h4V76zM813.4 76v-40.0h4V76zM815.4 76v-16.0h4V76zM819.3 76v-16.0h4V76z"/>
+<path class="axis" d="M132 76H860M162.7 76v5M224.0 76v5M285.3 76v5M340.7 76v5M402.0 76v5M461.4 76v5M522.7 76v5M582.1 76v5M643.4 76v5M704.7 76v5M764.1 76v5M825.4 76v5"/>
+<path class="day" d="M398.1 76v-40.0h4V76zM400.0 76v-16.0h4V76zM402.0 76v-24.0h4V76zM591.9 76v-16.0h4V76zM605.8 76v-56.0h4V76zM736.3 76v-16.0h4V76zM738.3 76v-16.0h4V76zM771.9 76v-24.0h4V76zM811.5 76v-40.0h4V76zM813.5 76v-16.0h4V76zM817.4 76v-16.0h4V76z"/>
 <text x="162.7" y="95">Dec</text>
 <text x="162.7" y="109">2025</text>
-<text x="224.2" y="95">Jan</text>
-<text x="224.2" y="109">2026</text>
-<text x="285.7" y="95">Feb</text>
-<text x="341.3" y="95">Mar</text>
-<text x="402.8" y="95">Apr</text>
-<text x="462.3" y="95">May</text>
-<text x="523.8" y="95">Jun</text>
-<text x="583.3" y="95">Jul</text>
-<text x="644.8" y="95">Aug</text>
-<text x="706.3" y="95">Sep</text>
-<text x="765.8" y="95">Oct</text>
-<text x="827.3" y="95">Nov</text>
-<text x="609.1" y="11" text-anchor="middle">6 on 14 Jul</text>
+<text x="224.0" y="95">Jan</text>
+<text x="224.0" y="109">2026</text>
+<text x="285.3" y="95">Feb</text>
+<text x="340.7" y="95">Mar</text>
+<text x="402.0" y="95">Apr</text>
+<text x="461.4" y="95">May</text>
+<text x="522.7" y="95">Jun</text>
+<text x="582.1" y="95">Jul</text>
+<text x="643.4" y="95">Aug</text>
+<text x="704.7" y="95">Sep</text>
+<text x="764.1" y="95">Oct</text>
+<text x="825.4" y="95">Nov</text>
+<text x="607.8" y="11" text-anchor="middle">6 on 14 Jul</text>
 </svg>
